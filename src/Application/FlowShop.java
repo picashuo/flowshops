@@ -6,6 +6,7 @@
 package Application;
 
 import ObjectiveFunctions.ObjectiveForFlowShop;
+import ObjectiveFunctions.ObjectiveForFlowShopI;
 import Read.ReadFlowShopData;
 import java.util.Arrays;
 
@@ -15,19 +16,19 @@ import java.util.Arrays;
  */
 public class FlowShop {
 
-    static String Path;
     double[] Weight;
     boolean[][] Tardy;
     int Jobs, Machines;
     double[][] DueDateAns;
     int[] Revenue, DueDate;
     String[] PathDataArrays;
+    static String[] Files = new String[]{"p10x5_1.txt"};
     int[][] ProccessingTime, Ciarray;
     int[] Sequence;
 
-    public void initiateVars() {
+    public void initiateVars(String Path) {
         ReadFlowShopData ReadFlowShop = new ReadFlowShopData();
-        ObjectiveForFlowShop ObjectiveForFlowShop = new ObjectiveForFlowShop();
+        ObjectiveForFlowShopI ObjectiveForFlowShop = new ObjectiveForFlowShop();
 
         ReadFlowShop.SetData(Path);
         ReadFlowShop.GetDataFromFile();
@@ -38,8 +39,9 @@ public class FlowShop {
         ProccessingTime = ReadFlowShop.GetPtime();
         Revenue = ReadFlowShop.GetRevenue();
         Weight = ReadFlowShop.GetWeight();
-        
-        ObjectiveForFlowShop.SetScheduleData(Machines, Jobs,DueDate,ProccessingTime);
+
+        ObjectiveForFlowShop.SetScheduleData(Machines, Jobs, DueDate, ProccessingTime);
+        ObjectiveForFlowShop.CalcObjective();
         
         Ciarray = ObjectiveForFlowShop.GetCiarray();
         DueDateAns = ObjectiveForFlowShop.GetDueDateAns();
@@ -48,7 +50,7 @@ public class FlowShop {
 
     public void start() {
         System.out.println("==================================");
-        System.out.println("路徑：" + Path);
+        //System.out.println("路徑：" + Path);
         System.out.println("Jobs：" + Jobs);
         System.out.println("DueDate：" + Arrays.toString(DueDate));
         System.out.println("Weight：" + Arrays.toString(Weight));
@@ -65,9 +67,11 @@ public class FlowShop {
     }
 
     public static void main(String[] args) {
-        Path = "src\\File\\p10x5_1.txt";
+        String Path = "src\\File\\";
         FlowShop FlowShops = new FlowShop();
-        FlowShops.initiateVars();
-        FlowShops.start();
+        for (int i = 0; i < Files.length; i++) {
+            FlowShops.initiateVars(Path + Files[i]);
+            FlowShops.start();
+        }
     }
 }

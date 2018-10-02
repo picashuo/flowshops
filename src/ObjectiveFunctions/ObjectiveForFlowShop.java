@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author User
  */
-public class ObjectiveForFlowShop {
+public class ObjectiveForFlowShop implements  ObjectiveForFlowShopI {
 
     int Machines;
     int[] Sequence, DueDate;
